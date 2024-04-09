@@ -48,7 +48,6 @@ import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/task-definition-selector/task-definition-selector.js';
 import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
@@ -191,6 +190,7 @@ import { EmojiService } from './common/services/emoji.service';
 import { TaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import { CreatePortfolioTaskListItemComponent } from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
+import { ProjectTasksListComponent } from './tasks/project-tasks-list/project-tasks-list.component';
 import { TaskCommentsViewerComponent } from './tasks/task-comments-viewer/task-comments-viewer.component';
 import { UserIconComponent } from './common/user-icon/user-icon.component';
 import { fPdfViewerComponent } from './common/pdf-viewer/pdf-viewer.component';
@@ -379,6 +379,10 @@ DoubtfireAngularJSModule.directive('fUnits', downgradeComponent({ component: FUn
 DoubtfireAngularJSModule.directive(
   'taskCommentsViewer',
   downgradeComponent({ component: TaskCommentsViewerComponent }),
+);
+DoubtfireAngularJSModule.directive(
+  'projectTasksList',
+  downgradeComponent({component: ProjectTasksListComponent}),
 );
 DoubtfireAngularJSModule.directive('userIcon', downgradeComponent({ component: UserIconComponent }));
 DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component: fPdfViewerComponent }));
