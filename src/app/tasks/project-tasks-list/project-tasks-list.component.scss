@@ -1,0 +1,26 @@
+.project-tasks-list {
+  @include remove-list-padding;
+  text-align: center;
+
+  .group-set-name {
+    color: #777;
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  li {
+    display: inline;
+    padding: 2px;
+  }
+
+  .group-set-tasks:first-child .group-set-name {
+    margin-top: 0;
+  }
+
+  // As a dropdown menu
+  &.dropdown-menu {
+    padding: 15px;
+    width: 400px;
+  }
+}
