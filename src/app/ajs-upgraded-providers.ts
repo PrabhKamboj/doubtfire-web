@@ -1,10 +1,9 @@
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 // Define an injection token for injecting globally into components.
 // Use the name of the angularjs service as the injection token string
 export const uploadSubmissionModal = new InjectionToken('uploadSubmissionModal');
 export const gradeTaskModal = new InjectionToken('gradeTaskModal');
-export const gradeService = new InjectionToken('gradeService');
 export const analyticsService = new InjectionToken('analyticsService');
 export const dateService = new InjectionToken('dateService');
 export const audioRecorder = new InjectionToken('audioRecorder');
@@ -67,12 +66,6 @@ export const uploadSubmissionModalProvider = {
 export const gradeTaskModalProvider = {
   provide: gradeTaskModal,
   useFactory: (i) => i.get('GradeTaskModal'),
-  deps: ['$injector'],
-};
-
-export const gradeServiceProvider = {
-  provide: gradeService,
-  useFactory: (i) => i.get('gradeService'),
   deps: ['$injector'],
 };
 

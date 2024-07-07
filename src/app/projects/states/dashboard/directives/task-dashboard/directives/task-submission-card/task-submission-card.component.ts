@@ -10,11 +10,11 @@ import { AlertService } from 'src/app/common/services/alert.service';
   templateUrl: './task-submission-card.component.html',
   styleUrls: ['./task-submission-card.component.scss'],
 })
-export class TaskSubmissionCardComponent implements OnChanges {
+export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   @Input() task: Task;
   canReuploadEvidence: boolean;
   canRegeneratePdf: boolean;
-  submission: { isProcessing: boolean; isUploaded: boolean };
+  submission: { isProcessing: boolean; isUploaded: boolean } = { isProcessing: false, isUploaded: false };
   urls: { pdf: string; files: string };
 
   constructor(
@@ -23,6 +23,12 @@ export class TaskSubmissionCardComponent implements OnChanges {
     private alerts: AlertService,
     private fileDownloader: FileDownloaderService
   ) {}
+
+  ngOnInit(): void {
+    if (this.task) {
+      this.reapplySubmissionData();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {

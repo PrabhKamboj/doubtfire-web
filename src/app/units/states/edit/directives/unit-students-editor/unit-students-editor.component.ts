@@ -60,7 +60,6 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.projectService.loadStudents(this.unit, true).subscribe(() => {
         // projects included in unit...
-        console.log('loaded withdrawn students');
       })
     );
   }

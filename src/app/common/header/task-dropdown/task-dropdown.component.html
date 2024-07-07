@@ -37,7 +37,7 @@
         <button mat-menu-item uiSref="units/analytics" [uiParams]="{unitId: currentUnit.id}">
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
-        @if (currentUnit.currentUserIsConvenor) {
+        @if (currentUnit.currentUserCanViewUnitAdmin) {
           <button mat-menu-item uiSref="units/admin" [uiParams]="{unitId: currentUnit.id}">
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration
@@ -99,70 +99,52 @@
       }
       @if (unitRole && currentView === 'UNIT') {
         <!-- <p class="task-dropdown-heading">Tasks</p> -->
-        @if (unitRole.role !== 'Admin') {
-          <button uiSref="units/tasks/inbox" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
-            <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <button
-            uiSref="units/tasks/definition"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
-            <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
-            <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <mat-divider></mat-divider>
-        }
+        <button uiSref="units/tasks/inbox" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
+        </button>
+        <button
+          uiSref="units/tasks/definition"
+          [uiParams]="{unitId: unitRole.unit.id}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
+        </button>
+        <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
+        </button>
+        <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
-        @if (unitRole.role !== 'Admin') {
-          <button
-            uiSref="units/students/list"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
-            <mat-icon aria-label="Students list" fontIcon="group"></mat-icon> Students
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <button
-            uiSref="units/students/groups"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
-            <mat-icon aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <button
-            uiSref="units/students/portfolios"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
-            <mat-icon
-              aria-label="Student portfolios icon"
-              fontIcon="collections_bookmark"
-            ></mat-icon>
-            Portfolios
-          </button>
-        }
-        @if (unitRole.role !== 'Admin') {
-          <mat-divider></mat-divider>
-        }
+        <button
+          uiSref="units/students/list"
+          [uiParams]="{unitId: unitRole.unit.id}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Students list" fontIcon="group"></mat-icon> Students
+        </button>
+        <button
+          uiSref="units/students/groups"
+          [uiParams]="{unitId: unitRole.unit.id}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
+        </button>
+        <button
+          uiSref="units/students/portfolios"
+          [uiParams]="{unitId: unitRole.unit.id}"
+          mat-menu-item
+        >
+          <mat-icon
+            aria-label="Student portfolios icon"
+            fontIcon="collections_bookmark"
+          ></mat-icon>
+          Portfolios
+        </button>
+        <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Unit</p> -->
-        @if (unitRole.role !== 'Admin') {
-          <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
-            <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
-          </button>
-        }
-        @if (unitRole.role === 'Convenor' || unitRole.role === 'Admin') {
+        <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
+        </button>
+        @if (unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor') {
           <button uiSref="units/admin" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration

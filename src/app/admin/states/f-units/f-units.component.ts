@@ -82,10 +82,19 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     if (this.mode === 'admin') {
       this.title = 'Administer units';
 
-      this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-        next: (units) => {
-          this.dataSource.data = this.mapUnitOrProjectsToColumns(units);
-        },
+      this.globalStateService.onLoad(() => {
+        this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
+          next: (units) => {
+            this.globalStateService.loadedUnits.values.subscribe(
+              (loadedUnits) =>
+                (this.dataSource.data = this.mapUnitOrProjectsToColumns(loadedUnits)),
+            );
+          },
+        });
+
+        this.globalStateService.loadedUnits.values.subscribe(
+          (units) => (this.dataSource.data = this.mapUnitOrProjectsToColumns(units)),
+        );
       });
     } else if (this.mode === 'student') {
       this.title = 'View all your units';
@@ -106,7 +115,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
         code: unitOrProject.code,
         name: unitOrProject.name,
         unit_role: unitOrProject.myRole,
-        teaching_period: unitOrProject.teachingPeriod?.name || 'custom',
+        teaching_period: unitOrProject.teachingPeriod?.name || 'Custom',
         start_date: unitOrProject.startDate,
         end_date: unitOrProject.endDate,
         active: unitOrProject.active,
@@ -118,7 +127,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
         unit_code: unitOrProject.unit.code,
         code: unitOrProject.unit.code,
         name: unitOrProject.unit.name,
-        teaching_period: unitOrProject.unit.teachingPeriod?.name || 'custom',
+        teaching_period: unitOrProject.unit.teachingPeriod?.name,
         start_date: unitOrProject.unit.startDate,
         end_date: unitOrProject.unit.endDate,
         active: unitOrProject.unit.active,
@@ -141,7 +150,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
         code: unitOrProject.unit.code,
         name: unitOrProject.unit.name,
         unit_role: unitOrProject.role,
-        teaching_period: unitOrProject.unit.teachingPeriod?.name || 'custom',
+        teaching_period: unitOrProject.unit.teachingPeriod?.name,
         start_date: unitOrProject.unit.startDate,
         end_date: unitOrProject.unit.endDate,
         active: unitOrProject.unit.active,

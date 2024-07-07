@@ -12,11 +12,11 @@ angular.module('doubtfire.projects.states.outcomes', [])
     data:
       task: "Learning Outcomes"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student']
+      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor']
    }
 )
 
-.controller("LearningOutcomesStateCtrl", ($scope, $rootScope, $timeout, outcomeService, newUnitService, Visualisation) ->
+.controller("LearningOutcomesStateCtrl", ($scope, $rootScope, $timeout, alertService, outcomeService, newUnitService, Visualisation) ->
   $scope.poaView = {
     activeTab: 'list'
   }

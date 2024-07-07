@@ -17,7 +17,6 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       $scope.studentProjectId = $scope.project.id
 
     $scope.grades = gradeService.grades
-    $scope.gradeAcronyms = gradeService.gradeAcronyms
 
     $scope.currentVisualisation = 'burndown'
 

@@ -12,6 +12,11 @@ export class FTaskBadgeComponent implements OnInit {
 
   lineHeight = 12;
 
+  get abbreviation(): string {
+    // return the first 3 characters of the task abbreviation
+    return this.taskDef.abbreviation.substring(0, 4);
+  }
+
   ngOnInit(): void {}
 
   calculateFontSize(length: number): string {

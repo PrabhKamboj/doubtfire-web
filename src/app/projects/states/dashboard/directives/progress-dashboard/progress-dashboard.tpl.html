@@ -15,6 +15,7 @@
             class="form-control input-lg"
             ng-model="project.targetGrade"
             ng-options="grade as grades.names[grade] for grade in grades.values"
+            ng-if="$index != 4"
             ng-change="updateTargetGrade(project.targetGrade)"></select>
         </div><!--/target-grade-body-->
       </div><!--/target-grade-card-->

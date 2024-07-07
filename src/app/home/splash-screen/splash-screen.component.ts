@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Component, ContentChild, OnInit, TemplateRef} from '@angular/core';
 import {AnimationOptions} from 'ngx-lottie';
 import {Observable} from 'rxjs';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {LoadingService} from './LoadingService.service';
+import {AnimationItem} from 'lottie-web';
 @Component({
   selector: 'splash-screen',
   templateUrl: './splash-screen.component.html',
@@ -20,6 +20,7 @@ export class SplashScreenComponent implements OnInit {
   loading$: Observable<boolean>;
 
   @ContentChild('loading')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customLoadingIndicator: TemplateRef<any> | null = null;
 
   options: AnimationOptions = {
@@ -38,4 +39,5 @@ export class SplashScreenComponent implements OnInit {
       }
     });
   }
+
 }

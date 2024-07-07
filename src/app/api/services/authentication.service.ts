@@ -105,7 +105,7 @@ export class AuthenticationService {
     }
   }
 
-  private readonly validRoles: string[] = ['anon', 'Student', 'Tutor', 'Convenor', 'Admin'];
+  private readonly validRoles: string[] = ['anon', 'Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'];
 
   private isValidRoleWhitelist(roleWhitelist: string[]) {
     return roleWhitelist.filter((role: string) => this.validRoles.includes(role)).length !== 0;
@@ -177,7 +177,8 @@ export class AuthenticationService {
 
     if (this.userService.currentUser.authenticationToken) {
       this.httpClient.delete(this.AUTH_URL).subscribe({
-        next: (response) => doSignOut(),
+        next: (_response) => doSignOut(),
+        error: (_response) => doSignOut(),
       });
     } else {
       doSignOut();

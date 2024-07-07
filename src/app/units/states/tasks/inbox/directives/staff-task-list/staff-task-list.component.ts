@@ -9,6 +9,7 @@ import {
   HostListener,
   ViewChild,
   TemplateRef,
+  OnDestroy,
 } from '@angular/core';
 import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
@@ -29,13 +30,14 @@ import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {HotkeysService} from '@ngneat/hotkeys';
 
 @Component({
   selector: 'df-staff-task-list',
   templateUrl: './staff-task-list.component.html',
   styleUrls: ['./staff-task-list.component.scss'],
 })
-export class StaffTaskListComponent implements OnInit, OnChanges {
+export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
 
   @Input() task: Task;
@@ -98,33 +100,19 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
   originalFilteredTasks: any[] = null;
   allowHover = true;
 
-  @HostListener('document:keydown', ['$event'])
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.metaKey) {
-      switch (event.key) {
-        case 'ArrowDown':
-          this.nextTask();
-          break;
-        case 'ArrowUp':
-          this.previousTask();
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
   constructor(
     private selectedTaskService: SelectedTaskService,
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
     private userService: UserService,
+    private hotkeys: HotkeysService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      ((!changes.unit?.isFirstChange &&
+      ((changes.unit &&
+        !changes.unit?.isFirstChange &&
         changes.unit.currentValue.id &&
         changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
         this.tasks == null) &&
@@ -134,8 +122,32 @@ export class StaffTaskListComponent implements OnInit, OnChanges {
       this.refreshData();
     }
   }
+  ngOnDestroy(): void {
+    this.hotkeys.removeShortcuts('meta.shift.arrowdown');
+    this.hotkeys.removeShortcuts('meta.shift.arrowup');
+  }
 
   ngOnInit(): void {
+    const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
+
+    if (!registeredHotkeys.includes('meta.shift.arrowdown')) {
+      this.hotkeys
+        .addShortcut({
+          keys: 'meta.shift.arrowdown',
+          description: 'Select next task',
+        })
+        .subscribe(() => this.nextTask());
+    }
+
+    if (!registeredHotkeys.includes('meta.shift.arrowup')) {
+      this.hotkeys
+        .addShortcut({
+          keys: 'meta.shift.arrowup',
+          description: 'Select previous task',
+        })
+        .subscribe(() => this.previousTask());
+    }
+
     // if device is movile always set hover to false
     // so you can instantly click on an item in the list
     if (navigator.maxTouchPoints > 1) {

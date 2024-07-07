@@ -58,7 +58,10 @@ export class TaskDefinitionResourcesComponent {
     if (validFiles.length > 0) {
       const file = validFiles[0];
       this.taskDefinitionService.uploadTaskSheet(this.taskDefinition, file).subscribe({
-        next: () => this.alerts.success('Uploaded task sheet', 2000),
+        next: () => {
+          this.alerts.success('Uploaded task sheet', 2000);
+          this.taskDefinition.hasTaskSheet = true;
+        },
         error: (message) => this.alerts.error(message, 6000),
       });
     } else {
@@ -73,7 +76,10 @@ export class TaskDefinitionResourcesComponent {
     if (validFiles.length > 0) {
       const file = validFiles[0];
       this.taskDefinitionService.uploadTaskResources(this.taskDefinition, file).subscribe({
-        next: () => this.alerts.success('Uploaded task sheet', 2000),
+        next: () => {
+          this.alerts.success('Uploaded task resources', 2000);
+          this.taskDefinition.hasTaskResources = true;
+        },
         error: (message) => this.alerts.error(message, 6000),
       });
     } else {

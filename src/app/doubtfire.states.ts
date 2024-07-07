@@ -59,7 +59,7 @@ const HomeState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Home Page',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -165,7 +165,7 @@ const WelcomeState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Welcome',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -182,7 +182,6 @@ const SignInState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Sign In',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
   },
 };
 
@@ -199,7 +198,7 @@ const EditProfileState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Edit Profile',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 

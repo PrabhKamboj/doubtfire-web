@@ -14,11 +14,11 @@ angular.module('doubtfire.projects.states.portfolio', [
     data:
       task: "Portfolio Creation"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student']
+      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor']
    }
 )
 
-.controller("ProjectsPortfolioStateCtrl", ($scope, DoubtfireConstants, newTaskService, gradeService, analyticsService) ->
+.controller("ProjectsPortfolioStateCtrl", ($scope, alertService, DoubtfireConstants, newTaskService, gradeService, analyticsService) ->
   #
   # Active task tab group
   #

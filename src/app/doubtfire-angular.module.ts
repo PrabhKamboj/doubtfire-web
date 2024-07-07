@@ -9,10 +9,9 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // Lottie animation module
-import {LottieModule, LottieCacheModule} from 'ngx-lottie';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import {LottieModule, LottieCacheModule} from 'ngx-lottie';
+import {provideLottieOptions, LottieComponent} from 'ngx-lottie';
 import player from 'lottie-web';
-
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -65,7 +64,6 @@ import {
   CsvResultModalProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
-  gradeServiceProvider,
   commentsModalProvider,
   plagiarismReportModalProvider,
   rootScopeProvider,
@@ -216,11 +214,6 @@ import {TooltipDirective} from './common/directives/tooltip.directive';
 
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
-// Note we need a separate function as it's required
-// by the AOT compiler.
-export function playerFactory() {
-  return import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
-}
 import {
   TeachingPeriodUnitImportDialogComponent,
   TeachingPeriodUnitImportService,
@@ -233,6 +226,8 @@ import {FUnitTaskListComponent} from './units/states/tasks/viewer/directives/f-u
 import {FTaskDetailsViewComponent} from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
 import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
+import {UnitCodeComponent} from './common/unit-code/unit-code.component';
+import {GradeService} from './common/services/grade.service';
 
 @NgModule({
   // Components we declare
@@ -327,6 +322,7 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     AlertComponent,
@@ -359,6 +355,7 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
     TutorialStreamService,
     UserService,
     TaskService,
+    GradeService,
     TaskSimilarityService,
     WebcalService,
     ActivityTypeService,
@@ -373,7 +370,6 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
     rootScopeProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    gradeServiceProvider,
     uploadSubmissionModalProvider,
     gradeTaskModalProvider,
     analyticsServiceProvider,
@@ -408,6 +404,9 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
     CreateNewUnitModal,
+    provideLottieOptions({
+      player: () => player,
+    }),
   ],
   imports: [
     FlexLayoutModule,
@@ -460,8 +459,7 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
     PickerModule,
     EmojiModule,
     PdfViewerModule,
-    LottieModule.forRoot({player: playerFactory}),
-    LottieCacheModule.forRoot(),
+    LottieComponent,
     UIRouterUpgradeModule.forRoot({states: doubtfireStates}),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

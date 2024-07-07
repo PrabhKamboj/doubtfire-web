@@ -63,6 +63,14 @@
           </div>
           <div ng-if="currentVisualisation == 'taskSummary'">
             <!-- <student-task-status-pie-chart project="project"></student-task-status-pie-chart> -->
+
+          <div class="panel-body text-center">
+            <p class="btn-group">
+              <label ng-repeat="grade in grades" ng-if="$index != 4" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.targetGrade" btn-radio="{{$index}}">
+                <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.targetGrade ? 'primary' : 'muted'}}"></grade-icon>
+              </label>
+            </p>
+
           </div>
         </div>
         <div class="panel-footer text-center">
@@ -81,6 +89,33 @@
             <strong class="text-muted">Target</strong>
             line to keep on track.
           </div>
+
+        </div><!--/button-switch-->
+      </div>
+      <div class="panel-body">
+        <div class="burndown-chart" ng-if="currentVisualisation == 'burndown'">
+          <progress-burndown-chart project="project" unit="unit"></progress-burndown-chart>
+        </div>
+        <div ng-if="currentVisualisation == 'taskSummary'">
+          <student-task-status-pie-chart project="project"></student-task-status-pie-chart>
+        </div>
+      </div>
+      <div class="panel-footer text-center">
+        <div ng-show="currentVisualisation == 'taskSummary'">
+          You have completed
+          <strong>{{taskStats.numberOfTasksCompleted}}</strong>
+          tasks and have
+          <strong>{{taskStats.numberOfTasksRemaining}}</strong>
+          left to complete to achieve a
+          <strong>{{grade.names[project.targetGrade]}}</strong>.
+        </div>
+        <div ng-show="currentVisualisation == 'burndown'">
+          Aim to keep your
+          <strong style="color: #e01b5d">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-muted">Target</strong>
+          line to keep on track.
+
         </div>
       </div>
     </div><!--primary-panel-->

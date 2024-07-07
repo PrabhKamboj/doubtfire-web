@@ -18,12 +18,15 @@
       [dataSource]="dataSource"
       matSort
       (matSortChange)="sortTableData($event)"
+      matSortActive="start_date"
+      matSortDirection="desc"
+      matSortDisableClear
     >
       <!-- Unit Code Column -->
       <ng-container matColumnDef="unit_code" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Code</th>
         <td mat-cell *matCellDef="let element" class="w-0 min-w-full">
-          <f-chip class="shrink">{{ element.unit_code }}</f-chip>
+          <f-unit-code [unit_code]="element.unit_code"></f-unit-code>
         </td>
       </ng-container>
 
@@ -52,11 +55,7 @@
       <ng-container matColumnDef="teaching_period" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Teaching Period</th>
         <td mat-cell *matCellDef="let element">
-          @if (element.teachingPeriod) {
-            {{ element.teachingPeriod.name }}
-          } @else {
-            Custom
-          }
+          {{ element.teaching_period }}
         </td>
       </ng-container>
 
@@ -69,7 +68,7 @@
       <!-- End Date Column -->
       <ng-container matColumnDef="end_date" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
-        <td mat-cell *matCellDef="let element">{{ element.start_date | date: 'EEE d MMM y' }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.end_date | date: 'EEE d MMM y' }}</td>
       </ng-container>
 
       <!-- Active Column -->

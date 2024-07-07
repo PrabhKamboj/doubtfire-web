@@ -15,19 +15,26 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {LoadingService} from 'src/app/home/splash-screen/LoadingService.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
-export class DoubtfireViewState {
-  public EntityObject: any; // Unit | Project | undefined
-  public EntityType: 'unit' | 'project' | 'other' = 'other';
-}
-
+/**
+ * The different types of views that can be shown. Used by the header to determine details to show.
+ */
 export enum ViewType {
   UNIT = 'UNIT',
   PROJECT = 'PROJECT',
   OTHER = 'OTHER',
 }
+
+/**
+ * The current view and entity being shown in the application - maintained currentViewAndEntitySubject$
+ * of the global state. This connects with the header to ensure the correct details are shown.
+ */
+export class DoubtfireViewState {
+  public entity: Project | Unit | UnitRole;
+  public viewType: ViewType;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,13 +50,8 @@ export class GlobalStateService implements OnDestroy {
   /**
    * The current view and entity, indicating what kind of page is being shown.
    */
-  public currentViewAndEntitySubject$: BehaviorSubject<{
-    viewType: ViewType;
-    entity: Project | Unit | UnitRole;
-  }> = new BehaviorSubject<{
-    viewType: ViewType;
-    entity: Project | Unit | UnitRole;
-  } | null>(null);
+  public currentViewAndEntitySubject$: BehaviorSubject<DoubtfireViewState> =
+    new BehaviorSubject<DoubtfireViewState | null>(null);
 
   /**
    * The unit roles loaded from the server
@@ -88,6 +90,10 @@ export class GlobalStateService implements OnDestroy {
     return this.currentUserProjects.values;
   }
 
+  /**
+   * This keeps track of whether the application is loading data or not. This is used to
+   * protect views from attempting to access details before they are loaded.
+   */
   public isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   public showHideHeader: Subject<boolean> = new Subject<boolean>();
@@ -100,7 +106,6 @@ export class GlobalStateService implements OnDestroy {
     private projectService: ProjectService,
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
-    private loadingService: LoadingService,
     @Inject(UIRouter) private router: UIRouter,
     private alerts: AlertService,
     private mediaObserver: MediaObserver,
@@ -115,8 +120,9 @@ export class GlobalStateService implements OnDestroy {
       if (this.authenticationService.isAuthenticated()) {
         this.loadGlobals();
       } else {
-        this.router.stateService.go('sign_in');
+        // not loading anything as no user - just redirect to sign in
         this.isLoadingSubject.next(false);
+        this.router.stateService.go('sign_in');
       }
     }, 800);
 
@@ -191,10 +197,12 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public signOut(): void {
+    // Show loading splash, and clear data.
     this.isLoadingSubject.next(true);
     this.userService.cache.clear();
     this.clearUnitsAndProjects();
     this.authenticationService.signOut();
+    this.isLoadingSubject.next(false);
     this.router.stateService.go('sign_in');
   }
 
@@ -206,34 +214,35 @@ export class GlobalStateService implements OnDestroy {
 
   public loadGlobals(): void {
     this.isLoadingSubject.next(true);
-    this.loadingService.loadingOn();
+
+    // Loading observer watches for loading of campuses, and teaching periods before loading unit roles, and projects
     const loadingObserver = new Observable((subscriber) => {
       // Loading campuses
       this.campusService.query().subscribe({
-        next: (reponse) => {
+        next: (_reponse) => {
           subscriber.next(true);
         },
-        error: (response) => {
+        error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
         },
       });
 
       // Loading teaching periods
       this.teachingPeriodService.query().subscribe({
-        next: (response) => {
+        next: (_response) => {
           subscriber.next(true);
         },
-        error: (response) => {
+        error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading teaching periods.', 6000);
         },
       });
     });
 
+    // Watch for load of campuses and teaching periods, then trigger loading of unit roles and projects
     loadingObserver.pipe(skip(1), take(1)).subscribe({
       next: () => {
+        // trigger loading of units and projects - this will end the loading when complete
         this.loadUnitsAndProjects();
-        this.isLoadingSubject.next(false);
-        this.loadingService.loadingOff();
       },
     });
   }
@@ -244,11 +253,11 @@ export class GlobalStateService implements OnDestroy {
   private loadUnitsAndProjects() {
     this.isLoadingSubject.next(true);
     this.unitRoleService.query().subscribe({
-      next: (unitRoles: UnitRole[]) => {
+      next: (_unitRoles: UnitRole[]) => {
         // unit roles are now in the cache
 
         this.projectService.query(undefined, {params: {include_in_active: false}}).subscribe({
-          next: (projects: Project[]) => {
+          next: (_projects: Project[]) => {
             // projects updated in cache
 
             setTimeout(() => {
@@ -260,8 +269,15 @@ export class GlobalStateService implements OnDestroy {
     });
   }
 
+  /**
+   * The passed in function is called after the global user data is loaded.
+   * This is only called once, and then the subscription is removed.
+   *
+   * @param run the function to run
+   */
   public onLoad(run: () => void): void {
     const subscription = this.isLoadingSubject.subscribe((loading: boolean) => {
+      // Only when the subject changes to "not loading"
       if (!loading) {
         run();
         setTimeout(() => subscription.unsubscribe());
@@ -282,7 +298,7 @@ export class GlobalStateService implements OnDestroy {
   /**
    * Switch to a new view, and its associated entity object
    */
-  public setView(kind: ViewType, entity?: any): void {
+  public setView(kind: ViewType, entity?: Project | Unit | UnitRole): void {
     this.currentViewAndEntitySubject$.next({viewType: kind, entity: entity});
   }
 

@@ -104,6 +104,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   public setEditStream(value: boolean): void {
+    console.log('set edit stream', value)
     if (!value) {
       this.stream.abbreviation = this.origStreamAbbr;
       this.stream.name = this.origName;

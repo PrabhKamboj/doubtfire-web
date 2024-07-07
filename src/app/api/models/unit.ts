@@ -154,8 +154,8 @@ export class Unit extends Entity {
     return this.myRole !== 'Student';
   }
 
-  public get currentUserIsConvenor(): boolean {
-    return this.myRole === 'Convenor' || this.myRole === 'Admin';
+  public get currentUserCanViewUnitAdmin(): boolean {
+    return this.myRole === 'Convenor' || this.myRole === 'Admin' || this.myRole === 'Auditor';
   }
 
   public get taskDefinitions(): readonly TaskDefinition[] {
@@ -296,7 +296,9 @@ export class Unit extends Entity {
     AppInjector.get(UnitService)
       .fetch(this.id)
       .subscribe({
-        next: (unit) => {},
+        next: (unit) => {
+          console.log(unit.teachingPeriod?.name);
+        },
         error: (message) => alerts.error(message, 6000),
       });
   }
