@@ -1,11 +1,6 @@
 import {Component, OnInit, Input, Inject, Output, EventEmitter} from '@angular/core';
 import {analyticsService} from 'src/app/ajs-upgraded-providers';
-import {Project} from 'src/app/api/models/project';
-import {TaskStatusEnum} from 'src/app/api/models/task-status';
-import {Unit} from 'src/app/api/models/unit';
-import {Task} from 'src/app/api/models/task';
-import {TaskService} from 'src/app/api/services/task.service';
-import {GradeService} from 'src/app/common/services/grade.service';
+import {Project, Unit, Task, TaskService, TaskStatusEnum, GradeService} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-project-tasks-list',
@@ -16,7 +11,7 @@ export class ProjectTasksListComponent implements OnInit {
   @Input() unit?: Unit;
   @Input() project?: Project;
   @Output() selectTask = new EventEmitter();
-  selectedChip: number | null = null;
+  selectedTask: Task | null = null;
 
   groupTasks = [];
 
@@ -68,8 +63,7 @@ export class ProjectTasksListComponent implements OnInit {
     return result;
   }
 
-
-  selectChip(index: number): void {
-    this.selectedChip = index;
+  selectChip(task: Task): void {
+    this.selectedTask = task;
   }
 }

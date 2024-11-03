@@ -56,3 +56,4 @@ export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
 export * from '../services/group-set.service';
 export * from '../services/task-similarity.service';
+export * from '../../common/services/grade.service';
